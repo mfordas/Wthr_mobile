@@ -3,6 +3,9 @@ import { View, Text, TextInput, TouchableOpacity, Alert, Linking, Image, Permiss
 import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
+import { connect } from 'react-redux';
+
+import { getWeatherData } from '../../actions/weatherActions';
 import mainStyling from '../../main_styling/main_styling';
 // import ErrorMessage from '../ReusableComponents/ErrorMessage';
 
@@ -28,24 +31,20 @@ import locationSrc from '../../img/pin.png';
 import confirmSrc from '../../img/checked.png';
 
 class MainScreen extends React.Component {
-  constructor(props){
-    super(props)
+  // constructor(props){
+  //   super(props)
 
-    this.state = {
-        city: 'Wrocław',
-        country: 'PL',
-      weatherImg: '',
-      lat: '52.22977',
-      lon: '21.01178',
-      citySearch:''
-    }
-  }
+  //   this.state = {
+  //       city: 'Wrocław',
+  //       country: 'PL',
+  //     weatherImg: '',
+  //     lat: '52.22977',
+  //     lon: '21.01178',
+  //     citySearch:''
+  //   }
+  // }
 
-  setURL() {
-    const weatherApiKey = '47f83ac09c8aba4209901acd619fdb03';
-    const weatherApiURL = `https://api.openweathermap.org/data/2.5/weather?lat=${this.state.lat}&lon=${this.state.lon}&units=metric&APPID=${weatherApiKey}`;
-    return weatherApiURL;
-  };
+  
 
 
   chooseIcon(iconCode) {
@@ -86,19 +85,6 @@ class MainScreen extends React.Component {
         console.log('Doesnt work');
     }
   };
-
-  getWeatherData = async () => {
-    const setApiUrl = this.setURL();
-    const weatherData = await axios.get(setApiUrl);
-    console.log(weatherData.data);
-    this.chooseIcon(weatherData.data.weather[0].icon);
-    this.setState({
-      temp: Math.round(weatherData.data.main.temp),
-      humidity: weatherData.data.main.humidity,
-      pressure: weatherData.data.main.pressure,
-      wind: weatherData.data.wind.speed,
-    })
-  }
 
   requestLocationPermission = async () => {
     try {
@@ -153,53 +139,53 @@ class MainScreen extends React.Component {
 componentDidMount () {
     this.requestLocationPermission();
     Geolocation.getCurrentPosition(info => {this.setState({lat: info.coords.latitude, lon: info.coords.longitude})});
-    this.getWeatherData();
+    this.props.getWeatherData();
     
 };
 
-componentDidUpdate (prevProps, prevState) {
-  if((this.state.lat !== prevState.lat) && (this.state.lon !== prevState.lon)){
-  this.getCityNameByCoordinates();
-  this.getWeatherData();
-};
+// componentDidUpdate (prevProps, prevState) {
+//   if((this.state.lat !== prevState.lat) && (this.state.lon !== prevState.lon)){
+//   this.getCityNameByCoordinates();
+//   this.props.getWeatherData();
+// };
 
-};
+// };
 
 
   render() {
 
-   const {city, country} = this.state;
+   
   
     return (
         <ScrollView style={mainStyling.container} contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}>
               
               <View><TouchableOpacity style={mainStyling.locationContainer}>
           <Image style={mainStyling.iconLocation} source={locationSrc} />
-          <Text style={mainStyling.mainText}>{city}, </Text>
-          <Text style={mainStyling.mainText}>{country}</Text>
+          <Text style={mainStyling.mainText}>, </Text>
+          <Text style={mainStyling.mainText}></Text>
           </TouchableOpacity>
         <View style={mainStyling.inputContainer}>
           <TextInput style={mainStyling.input} onChangeText={text => this.setState({citySearch: text})}></TextInput>
-          <TouchableOpacity style={mainStyling.locationContainer} onPress={() => this.getCityCoordinatesByName(this.state.citySearch)}>
+          <TouchableOpacity style={mainStyling.locationContainer} onPress={() => this.props.getWeatherData()}>
           <Image style={mainStyling.iconConfirm} source={confirmSrc} />
           </TouchableOpacity>
         </View>
         </View> 
         <View style={mainStyling.weatherContainer}>
-          <Text style={mainStyling.temperature}>{this.state.temp}°C</Text>
+          <Text style={mainStyling.temperature}>{this.props.temp} °C</Text>
           <View style={mainStyling.conditionsContainer}>
           <Image style={mainStyling.conditionsIcon} source={windSrc} />
-          <Text style={mainStyling.conditionsText}>{this.state.wind} m/s</Text>
+          <Text style={mainStyling.conditionsText}>{this.props.wind} m/s</Text>
           </View>
           <View style={mainStyling.conditionsContainer}>
           <Image style={mainStyling.conditionsIcon} source={humiditySrc} />
-    <Text style={mainStyling.conditionsText}>{this.state.humidity}%</Text>
+    <Text style={mainStyling.conditionsText}>{this.props.humidity}%</Text>
           </View>
           <View style={mainStyling.conditionsContainer}>
           <Image style={mainStyling.conditionsIcon} source={gaugeSrc} />
-          <Text style={mainStyling.conditionsText}>{this.state.pressure} hPa</Text>
+          <Text style={mainStyling.conditionsText}>{this.props.pressure} hPa</Text>
           </View>
-          <Image style={mainStyling.mainWeatherIcon} source={this.state.weatherImg} />
+          {/* <Image style={mainStyling.mainWeatherIcon} source={this.state.weatherImg} /> */}
         </View>
         <View style={mainStyling.iconsAuthorContainer}>
             <Text>Icons made by </Text>
@@ -212,4 +198,11 @@ componentDidUpdate (prevProps, prevState) {
   }
 }
 
-export default MainScreen;
+const mapStateToProps = state => ({
+  temp: state.temp.temp,
+  humidity: state.humidity.humidity,
+  pressure: state.pressure.pressure,
+  wind: state.wind.wind,
+})
+
+export default connect(mapStateToProps, { getWeatherData })(MainScreen);

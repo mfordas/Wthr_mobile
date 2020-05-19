@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, ScrollView, Image, PermissionsAndroid, Button } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, Linking, Image, PermissionsAndroid, Button, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
@@ -27,10 +27,6 @@ import windSrc from '../../img/wind.png';
 import locationSrc from '../../img/pin.png';
 import confirmSrc from '../../img/checked.png';
 
-
-
-
-
 class MainScreen extends React.Component {
   constructor(props){
     super(props)
@@ -41,19 +37,68 @@ class MainScreen extends React.Component {
       weatherImg: '',
       lat: '52.22977',
       lon: '21.01178',
+      citySearch:''
     }
   }
 
+  setURL() {
+    const weatherApiKey = '47f83ac09c8aba4209901acd619fdb03';
+    const weatherApiURL = `https://api.openweathermap.org/data/2.5/weather?lat=${this.state.lat}&lon=${this.state.lon}&units=metric&APPID=${weatherApiKey}`;
+    return weatherApiURL;
+  };
 
-  
 
-  setItem = async (key, value) => {
-    try {
-      await AsyncStorage.setItem(`${key}`, `${value}`)
-    } catch (e) {
-      // saving error
+  chooseIcon(iconCode) {
+    switch (iconCode) {
+      case '01d':
+        return this.setState({weatherImg: sunSrc});
+      case '01n':
+        return this.setState({weatherImg: nightSrc});
+      case '02d':
+        return this.setState({weatherImg: weatherSrc});
+      case '02n':
+        return this.setState({weatherImg: moonSrc});
+      case '03d':
+      case '03n':
+        return this.setState({weatherImg: cloudSrc});
+      case '04d':
+      case '04n':
+        return this.setState({weatherImg: cloudySrc});
+      case '09d':
+      case '09n':
+        return this.setState({weatherImg: rainSrc});
+      case '10d':
+        return this.setState({weatherImg: weather2Src});
+      case '10n':
+        return this.setState({weatherImg: atmospheric2Src});
+      case '11d':
+        return this.setState({weatherImg: stormSrc});
+      case '11n':
+        return this.setState({weatherImg: atmosphericSrc});
+      case '13d':
+      case '13n':
+        return this.setState({weatherImg: snowflakeSrc});
+      case '50d':
+        return this.setState({weatherImg: fogSrc});
+      case '50n':
+        return this.setState({weatherImg: foggySrc});
+      default:
+        console.log('Doesnt work');
     }
   };
+
+  getWeatherData = async () => {
+    const setApiUrl = this.setURL();
+    const weatherData = await axios.get(setApiUrl);
+    console.log(weatherData.data);
+    this.chooseIcon(weatherData.data.weather[0].icon);
+    this.setState({
+      temp: Math.round(weatherData.data.main.temp),
+      humidity: weatherData.data.main.humidity,
+      pressure: weatherData.data.main.pressure,
+      wind: weatherData.data.wind.speed,
+    })
+  }
 
   requestLocationPermission = async () => {
     try {
@@ -81,83 +126,44 @@ class MainScreen extends React.Component {
   };
 
   async getCityNameByCoordinates() {
-      Geolocation.getCurrentPosition(info => {this.setState({lat: info.coords.latitude, lon: info.coords.longitude})});
 
     const mainData = await axios.get(`https://geocode.xyz/${this.state.lat},${this.state.lon}?geoit=json`);
     const cityData = mainData.data;
 
-    this.setState({city: cityData.city, country: cityData.country});
-
-    // return new Promise(function (resolve, reject) {
-    //   fetch(`https://geocode.xyz/${lat},${lon}?geoit=json`)
-    //     .then(res => res.json())
-    //     .then(data => {
-    //       resolve(data);
-    //     })
-    //     .catch((error) => {
-    //       reject(error);
-    //     });
-    // });
+    this.setState({city: cityData.city, country: cityData.prov});
+    
   };
 
   
   
-//   getCityCoordinatesByName(cityName) {
-//     return new Promise(function (resolve, reject) {
-//       fetch(`https://geocode.xyz/?locate=${cityName}&geoit=json`)
-//         .then(res => res.json())
-//         .then(data => {
-//           resolve(data);
-//         })
-//         .catch((data) => {
-//           reject(data);
-//         });
-//     });
-//   };
+  async getCityCoordinatesByName(cityName) {
+    try {
+      const mainData = await axios.get(`https://geocode.xyz/?locate=${cityName}&geoit=json`);
+      this.setState({
+        lon: mainData.data.longt,
+        lat: mainData.data.latt
+      })
+    } catch {
+      console.log('error');
+    }
 
-//   getUserLocation() {
-//     return new Promise(function (resolve, reject) {
-//       window.navigator.geolocation.getCurrentPosition(
-//         async position => {
-//             let lat = Math.round(position.coords.latitude * 100000) / 100000;
-//             let lon = Math.round(position.coords.longitude * 100000) / 100000;
-//             lat = lat.toString();
-//             lon = lon.toString();
-//             for (let i = lat.length - 1; i >= 1; i--) {
-//               if (lat[i - 1] !== '.') {
-//                 if (lat[i] === '0') {
-//                   lat.pop();
-//                 } else {
-//                   break;
-//                 }
-//               }
-//             }
-//             for (let i = lon.length - 1; i >= 1; i--) {
-//               if (lon[i - 1] !== '.') {
-//                 if (lon[i] === '0') {
-//                   lon.pop();
-//                 } else {
-//                   break;
-//                 }
-//               }
-//             }
-//             resolve({
-//               lat,
-//               lon
-//             });
-//           },
-//           err => {
-//             reject(err);
-//           },
-//       );
-//     });
-//   };
-
+    
+  };
 
 componentDidMount () {
     this.requestLocationPermission();
-    this.getCityNameByCoordinates();
-}
+    Geolocation.getCurrentPosition(info => {this.setState({lat: info.coords.latitude, lon: info.coords.longitude})});
+    this.getWeatherData();
+    
+};
+
+componentDidUpdate (prevProps, prevState) {
+  if((this.state.lat !== prevState.lat) && (this.state.lon !== prevState.lon)){
+  this.getCityNameByCoordinates();
+  this.getWeatherData();
+};
+
+};
 
 
   render() {
@@ -165,14 +171,43 @@ componentDidMount () {
    const {city, country} = this.state;
   
     return (
-        <View style={mainStyling.container}>
-              <TouchableOpacity style={mainStyling.locationContainer}>
+        <ScrollView style={mainStyling.container} contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}>
+              
+              <View><TouchableOpacity style={mainStyling.locationContainer}>
           <Image style={mainStyling.iconLocation} source={locationSrc} />
           <Text style={mainStyling.mainText}>{city}, </Text>
           <Text style={mainStyling.mainText}>{country}</Text>
           </TouchableOpacity>
-          <Button onPress={() => this.getCityNameByCoordinates()} title={'button'}></Button>
+        <View style={mainStyling.inputContainer}>
+          <TextInput style={mainStyling.input} onChangeText={text => this.setState({citySearch: text})}></TextInput>
+          <TouchableOpacity style={mainStyling.locationContainer} onPress={() => this.getCityCoordinatesByName(this.state.citySearch)}>
+          <Image style={mainStyling.iconConfirm} source={confirmSrc} />
+          </TouchableOpacity>
         </View>
+        </View> 
+        <View style={mainStyling.weatherContainer}>
+          <Text style={mainStyling.temperature}>{this.state.temp}°C</Text>
+          <View style={mainStyling.conditionsContainer}>
+          <Image style={mainStyling.conditionsIcon} source={windSrc} />
+          <Text style={mainStyling.conditionsText}>{this.state.wind} m/s</Text>
+          </View>
+          <View style={mainStyling.conditionsContainer}>
+          <Image style={mainStyling.conditionsIcon} source={humiditySrc} />
+    <Text style={mainStyling.conditionsText}>{this.state.humidity}%</Text>
+          </View>
+          <View style={mainStyling.conditionsContainer}>
+          <Image style={mainStyling.conditionsIcon} source={gaugeSrc} />
+          <Text style={mainStyling.conditionsText}>{this.state.pressure} hPa</Text>
+          </View>
+          <Image style={mainStyling.mainWeatherIcon} source={this.state.weatherImg} />
+        </View>
+        <View style={mainStyling.iconsAuthorContainer}>
+            <Text>Icons made by </Text>
+            <TouchableOpacity onPress={() => Linking.openURL("https://www.flaticon.com/authors/those-icons")}><Text>Those Icons</Text></TouchableOpacity>
+             <Text> from </Text>
+             <TouchableOpacity onPress={() => Linking.openURL("https://www.flaticon.com/")}><Text>www.flaticon.com</Text></TouchableOpacity>
+        </View>
+        </ScrollView>
     );
   }
 }

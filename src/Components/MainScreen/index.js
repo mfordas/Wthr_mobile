@@ -6,6 +6,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 
 import { getWeatherData } from '../../actions/weatherActions';
+import { getCityCoordinatesByName } from '../../actions/locationActions';
 import mainStyling from '../../main_styling/main_styling';
 // import ErrorMessage from '../ReusableComponents/ErrorMessage';
 
@@ -35,11 +36,7 @@ class MainScreen extends React.Component {
   //   super(props)
 
   //   this.state = {
-  //       city: 'Wrocław',
-  //       country: 'PL',
   //     weatherImg: '',
-  //     lat: '52.22977',
-  //     lon: '21.01178',
   //     citySearch:''
   //   }
   // }
@@ -50,39 +47,39 @@ class MainScreen extends React.Component {
   chooseIcon(iconCode) {
     switch (iconCode) {
       case '01d':
-        return this.setState({weatherImg: sunSrc});
+        return <Image style={mainStyling.mainWeatherIcon} source={sunSrc} />;
       case '01n':
-        return this.setState({weatherImg: nightSrc});
+        return <Image style={mainStyling.mainWeatherIcon} source={nightSrc} />;
       case '02d':
-        return this.setState({weatherImg: weatherSrc});
+        return <Image style={mainStyling.mainWeatherIcon} source={weatherSrc} />
       case '02n':
-        return this.setState({weatherImg: moonSrc});
+        return <Image style={mainStyling.mainWeatherIcon} source={moonSrc} />
       case '03d':
       case '03n':
-        return this.setState({weatherImg: cloudSrc});
+        return <Image style={mainStyling.mainWeatherIcon} source={cloudSrc} />
       case '04d':
       case '04n':
-        return this.setState({weatherImg: cloudySrc});
+        return <Image style={mainStyling.mainWeatherIcon} source={cloudySrc} />
       case '09d':
       case '09n':
-        return this.setState({weatherImg: rainSrc});
+        return <Image style={mainStyling.mainWeatherIcon} source={rainSrc} />
       case '10d':
-        return this.setState({weatherImg: weather2Src});
+        return <Image style={mainStyling.mainWeatherIcon} source={weather2Src} />
       case '10n':
-        return this.setState({weatherImg: atmospheric2Src});
+        return <Image style={mainStyling.mainWeatherIcon} source={atmospheric2Src} />
       case '11d':
-        return this.setState({weatherImg: stormSrc});
+        return <Image style={mainStyling.mainWeatherIcon} source={stormSrc} />
       case '11n':
-        return this.setState({weatherImg: atmosphericSrc});
+        return <Image style={mainStyling.mainWeatherIcon} source={atmosphericSrc} />
       case '13d':
       case '13n':
-        return this.setState({weatherImg: snowflakeSrc});
+        return <Image style={mainStyling.mainWeatherIcon} source={snowflakeSrc} />
       case '50d':
-        return this.setState({weatherImg: fogSrc});
+        return <Image style={mainStyling.mainWeatherIcon} source={fogSrc} />
       case '50n':
-        return this.setState({weatherImg: foggySrc});
+        return <Image style={mainStyling.mainWeatherIcon} source={foggySrc} />
       default:
-        console.log('Doesnt work');
+        return null
     }
   };
 
@@ -122,25 +119,13 @@ class MainScreen extends React.Component {
 
   
   
-  async getCityCoordinatesByName(cityName) {
-    try {
-      const mainData = await axios.get(`https://geocode.xyz/?locate=${cityName}&geoit=json`);
-      this.setState({
-        lon: mainData.data.longt,
-        lat: mainData.data.latt
-      })
-    } catch {
-      console.log('error');
-    }
-
-    
-  };
+  
 
 componentDidMount () {
     this.requestLocationPermission();
-    Geolocation.getCurrentPosition(info => {this.setState({lat: info.coords.latitude, lon: info.coords.longitude})});
-    this.props.getWeatherData();
-    
+    // Geolocation.getCurrentPosition(info => {this.setState({lat: info.coords.latitude, lon: info.coords.longitude})});
+    this.props.getWeatherData(this.props.coordinatesData.coordinatesData.lat, this.props.coordinatesData.coordinatesData.lon);
+    // this.chooseIcon(this.props.weatherData.weatherData.weather.icon);
 };
 
 // componentDidUpdate (prevProps, prevState) {
@@ -158,34 +143,33 @@ componentDidMount () {
   
     return (
         <ScrollView style={mainStyling.container} contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}>
-              
               <View><TouchableOpacity style={mainStyling.locationContainer}>
           <Image style={mainStyling.iconLocation} source={locationSrc} />
           <Text style={mainStyling.mainText}>, </Text>
           <Text style={mainStyling.mainText}></Text>
           </TouchableOpacity>
         <View style={mainStyling.inputContainer}>
-          <TextInput style={mainStyling.input} onChangeText={text => this.setState({citySearch: text})}></TextInput>
-          <TouchableOpacity style={mainStyling.locationContainer} onPress={() => this.props.getWeatherData()}>
+          <TextInput style={mainStyling.input} onChangeText={text => this.props.getCityCoordinatesByName(text)}></TextInput>
+          <TouchableOpacity style={mainStyling.locationContainer} onPress={() => {this.props.getWeatherData(this.props.coordinatesData.coordinatesData.latt, this.props.coordinatesData.coordinatesData.longt)}}>
           <Image style={mainStyling.iconConfirm} source={confirmSrc} />
           </TouchableOpacity>
         </View>
         </View> 
         <View style={mainStyling.weatherContainer}>
-          <Text style={mainStyling.temperature}>{this.props.temp} °C</Text>
+          <Text style={mainStyling.temperature}>{Math.round(this.props.weatherData.weatherData.main.temp)} °C</Text>
           <View style={mainStyling.conditionsContainer}>
           <Image style={mainStyling.conditionsIcon} source={windSrc} />
-          <Text style={mainStyling.conditionsText}>{this.props.wind} m/s</Text>
+          <Text style={mainStyling.conditionsText}>{this.props.weatherData.weatherData.wind.speed} m/s</Text>
           </View>
           <View style={mainStyling.conditionsContainer}>
           <Image style={mainStyling.conditionsIcon} source={humiditySrc} />
-    <Text style={mainStyling.conditionsText}>{this.props.humidity}%</Text>
+    <Text style={mainStyling.conditionsText}>{this.props.weatherData.weatherData.main.humidity}%</Text>
           </View>
           <View style={mainStyling.conditionsContainer}>
           <Image style={mainStyling.conditionsIcon} source={gaugeSrc} />
-          <Text style={mainStyling.conditionsText}>{this.props.pressure} hPa</Text>
+          <Text style={mainStyling.conditionsText}>{this.props.weatherData.weatherData.main.pressure} hPa</Text>
           </View>
-          {/* <Image style={mainStyling.mainWeatherIcon} source={this.state.weatherImg} /> */}
+          {this.chooseIcon(this.props.weatherData.weatherData.weather[0].icon)}
         </View>
         <View style={mainStyling.iconsAuthorContainer}>
             <Text>Icons made by </Text>
@@ -199,10 +183,8 @@ componentDidMount () {
 }
 
 const mapStateToProps = state => ({
-  temp: state.temp.temp,
-  humidity: state.humidity.humidity,
-  pressure: state.pressure.pressure,
-  wind: state.wind.wind,
+  weatherData: state.weatherData,
+  coordinatesData: state.coordinatesData,
 })
 
-export default connect(mapStateToProps, { getWeatherData })(MainScreen);
+export default connect(mapStateToProps, { getWeatherData, getCityCoordinatesByName })(MainScreen);

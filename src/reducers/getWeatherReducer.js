@@ -2,15 +2,7 @@ import { GET_WEATHER , GET_CITY_NAME_AND_COUNTRY, GET_COORDINATES } from '../act
 
 const initialState = {
     weatherData: {},
-    city: 'Wrocław',
-    country: 'PL',
-  weatherImg: '',
-  lat: '52.22977',
-  lon: '21.01178',
-    temp: '',
-    humidity: '',
-    pressure: '',
-    wind: '',
+    
 };
 
 export default function(state = initialState, action){
@@ -19,10 +11,7 @@ export default function(state = initialState, action){
             console.log('reducer');
         return  {
             ...state,
-            temp: action.temp,
-            humidity: action.humidity,
-            pressure: action.pressure,
-            wind: action.wind,
+            weatherData: action.weatherData,
         }
         default: 
         return state;

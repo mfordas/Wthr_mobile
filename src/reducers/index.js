@@ -5,8 +5,6 @@ import getWeatherReducer from './getWeatherReducer';
 
 
 export default combineReducers({
-        temp: getWeatherReducer,
-        humidity: getWeatherReducer,
-        pressure: getWeatherReducer,
-        wind: getWeatherReducer,
+        weatherData: getWeatherReducer,
+        coordinatesData: getLocationReducer,
 })

@@ -1,12 +1,10 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, Linking, Image, PermissionsAndroid, Button, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import { View, Text, TextInput, TouchableOpacity, Linking, Image, PermissionsAndroid, ScrollView } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
-import axios from 'axios';
 import { connect } from 'react-redux';
 
 import { getWeatherData } from '../../actions/weatherActions';
-import { getCityCoordinatesByName } from '../../actions/locationActions';
+import { getCityCoordinatesByName, getCityNameByCoordinates } from '../../actions/locationActions';
 import mainStyling from '../../main_styling/main_styling';
 // import ErrorMessage from '../ReusableComponents/ErrorMessage';
 
@@ -32,17 +30,13 @@ import locationSrc from '../../img/pin.png';
 import confirmSrc from '../../img/checked.png';
 
 class MainScreen extends React.Component {
-  // constructor(props){
-  //   super(props)
+  constructor(props){
+    super(props)
 
-  //   this.state = {
-  //     weatherImg: '',
-  //     citySearch:''
-  //   }
-  // }
-
-  
-
+    this.state = {
+      citySearch:''
+    }
+  }
 
   chooseIcon(iconCode) {
     switch (iconCode) {
@@ -104,59 +98,46 @@ class MainScreen extends React.Component {
         console.log("Location permission denied");
       }
     } catch (err) {
+      console.log('errror');
       console.warn(err);
     }
   };
 
-  async getCityNameByCoordinates() {
-
-    const mainData = await axios.get(`https://geocode.xyz/${this.state.lat},${this.state.lon}?geoit=json`);
-    const cityData = mainData.data;
-
-    this.setState({city: cityData.city, country: cityData.prov});
-    
-  };
-
-  
-  
-  
-
-componentDidMount () {
+async componentDidMount () {
     this.requestLocationPermission();
-    // Geolocation.getCurrentPosition(info => {this.setState({lat: info.coords.latitude, lon: info.coords.longitude})});
-    this.props.getWeatherData(this.props.coordinatesData.coordinatesData.lat, this.props.coordinatesData.coordinatesData.lon);
-    // this.chooseIcon(this.props.weatherData.weatherData.weather.icon);
+    Geolocation.getCurrentPosition(async info => {
+      await this.props.getCityNameByCoordinates(info.coords.latitude, info.coords.longitude);
+      await this.props.getWeatherData(info.coords.latitude, info.coords.longitude);
+    });
+    
 };
 
-// componentDidUpdate (prevProps, prevState) {
-//   if((this.state.lat !== prevState.lat) && (this.state.lon !== prevState.lon)){
-//   this.getCityNameByCoordinates();
-//   this.props.getWeatherData();
-// };
-
-// };
+componentDidUpdate (prevProps, prevState) {
+  if((this.props.coordinatesData.coordinatesData.latt !== prevProps.coordinatesData.coordinatesData.latt) && (this.props.coordinatesData.coordinatesData.longt !== prevProps.coordinatesData.coordinatesData.longt)){
+  this.props.getWeatherData(this.props.coordinatesData.coordinatesData.latt, this.props.coordinatesData.coordinatesData.longt);
+};
+};
 
 
   render() {
-
-   
-  
     return (
         <ScrollView style={mainStyling.container} contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}>
               <View><TouchableOpacity style={mainStyling.locationContainer}>
           <Image style={mainStyling.iconLocation} source={locationSrc} />
-          <Text style={mainStyling.mainText}>, </Text>
-          <Text style={mainStyling.mainText}></Text>
+          <Text style={mainStyling.mainText}>{this.props.cityData.cityData.city}, </Text>
+          <Text style={mainStyling.mainText}>{this.props.cityData.cityData.prov}</Text>
           </TouchableOpacity>
         <View style={mainStyling.inputContainer}>
-          <TextInput style={mainStyling.input} onChangeText={text => this.props.getCityCoordinatesByName(text)}></TextInput>
-          <TouchableOpacity style={mainStyling.locationContainer} onPress={() => {this.props.getWeatherData(this.props.coordinatesData.coordinatesData.latt, this.props.coordinatesData.coordinatesData.longt)}}>
+          <TextInput style={mainStyling.input} onChangeText={text => this.setState({citySearch: text})}></TextInput>
+          <TouchableOpacity style={mainStyling.locationContainer} onPress={async () => {
+              await this.props.getCityCoordinatesByName(this.state.citySearch);
+              await this.props.getCityNameByCoordinates(this.props.coordinatesData.coordinatesData.latt, this.props.coordinatesData.coordinatesData.longt);}}>
           <Image style={mainStyling.iconConfirm} source={confirmSrc} />
           </TouchableOpacity>
         </View>
         </View> 
         <View style={mainStyling.weatherContainer}>
-          <Text style={mainStyling.temperature}>{Math.round(this.props.weatherData.weatherData.main.temp)} °C</Text>
+          <Text style={mainStyling.temperature}>{Math.round(this.props.weatherData.weatherData.main.temp)}°C</Text>
           <View style={mainStyling.conditionsContainer}>
           <Image style={mainStyling.conditionsIcon} source={windSrc} />
           <Text style={mainStyling.conditionsText}>{this.props.weatherData.weatherData.wind.speed} m/s</Text>
@@ -185,6 +166,7 @@ componentDidMount () {
 const mapStateToProps = state => ({
   weatherData: state.weatherData,
   coordinatesData: state.coordinatesData,
+  cityData: state.cityData,
 })
 
-export default connect(mapStateToProps, { getWeatherData, getCityCoordinatesByName })(MainScreen);
+export default connect(mapStateToProps, { getWeatherData, getCityCoordinatesByName, getCityNameByCoordinates })(MainScreen);

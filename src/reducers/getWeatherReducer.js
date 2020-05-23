@@ -1,4 +1,4 @@
-import { GET_WEATHER , GET_CITY_NAME_AND_COUNTRY, GET_COORDINATES } from '../actions/types';
+import { GET_WEATHER } from '../actions/types';
 
 const initialState = {
     weatherData: {

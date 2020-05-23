@@ -8,9 +8,9 @@ export const getCityCoordinatesByName = (cityName) => async dispatch => {
       dispatch({
         type: GET_COORDINATES,
         coordinatesData: mainData.data,
-    });
+      });
     } catch {
-      console.log('error');
+      console.log('Coordinates for this city not found');
     }
     
   };
@@ -24,7 +24,7 @@ export const getCityNameByCoordinates = (lat, lon) => async dispatch => {
         cityData: cityData,
     });
     } catch {
-      console.log('error');
+      console.log('City name for this coordinates not found');
     }
     
   };

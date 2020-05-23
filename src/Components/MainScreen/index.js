@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Linking, Image, PermissionsAndroid, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Linking, Image, ScrollView } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import { connect } from 'react-redux';
 
 import { getWeatherData } from '../../actions/weatherActions';
 import { getCityCoordinatesByName, getCityNameByCoordinates } from '../../actions/locationActions';
 import mainStyling from '../../main_styling/main_styling';
-// import ErrorMessage from '../ReusableComponents/ErrorMessage';
+import Location from './Location';
 
 import sunSrc from '../../img/sun.png';
 import weatherSrc from '../../img/weather.png';
@@ -26,17 +26,7 @@ import gaugeSrc from '../../img/gauge.png';
 import humiditySrc from '../../img/humidity.png';
 import windSrc from '../../img/wind.png';
 
-import locationSrc from '../../img/pin.png';
-import confirmSrc from '../../img/checked.png';
-
 class MainScreen extends React.Component {
-  constructor(props){
-    super(props)
-
-    this.state = {
-      citySearch:''
-    }
-  }
 
   chooseIcon(iconCode) {
     switch (iconCode) {
@@ -77,34 +67,7 @@ class MainScreen extends React.Component {
     }
   };
 
-  requestLocationPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: "Wthr App Location Permission",
-          message:
-            "Wthr App needs access to your location ",
-          buttonNeutral: "Ask Me Later",
-          buttonNegative: "Cancel",
-          buttonPositive: "OK"
-        }
-        
-      );
-      
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("You can use the location");
-      } else {
-        console.log("Location permission denied");
-      }
-    } catch (err) {
-      console.log('errror');
-      console.warn(err);
-    }
-  };
-
 async componentDidMount () {
-    this.requestLocationPermission();
     Geolocation.getCurrentPosition(async info => {
       await this.props.getCityNameByCoordinates(info.coords.latitude, info.coords.longitude);
       await this.props.getWeatherData(info.coords.latitude, info.coords.longitude);
@@ -122,20 +85,7 @@ componentDidUpdate (prevProps, prevState) {
   render() {
     return (
         <ScrollView style={mainStyling.container} contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}>
-              <View><TouchableOpacity style={mainStyling.locationContainer}>
-          <Image style={mainStyling.iconLocation} source={locationSrc} />
-          <Text style={mainStyling.mainText}>{this.props.cityData.cityData.city}, </Text>
-          <Text style={mainStyling.mainText}>{this.props.cityData.cityData.prov}</Text>
-          </TouchableOpacity>
-        <View style={mainStyling.inputContainer}>
-          <TextInput style={mainStyling.input} onChangeText={text => this.setState({citySearch: text})}></TextInput>
-          <TouchableOpacity style={mainStyling.locationContainer} onPress={async () => {
-              await this.props.getCityCoordinatesByName(this.state.citySearch);
-              await this.props.getCityNameByCoordinates(this.props.coordinatesData.coordinatesData.latt, this.props.coordinatesData.coordinatesData.longt);}}>
-          <Image style={mainStyling.iconConfirm} source={confirmSrc} />
-          </TouchableOpacity>
-        </View>
-        </View> 
+        <Location />
         <View style={mainStyling.weatherContainer}>
           <Text style={mainStyling.temperature}>{Math.round(this.props.weatherData.weatherData.main.temp)}°C</Text>
           <View style={mainStyling.conditionsContainer}>

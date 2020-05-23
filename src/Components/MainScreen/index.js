@@ -7,6 +7,7 @@ import { getWeatherData } from '../../actions/weatherActions';
 import { getCityCoordinatesByName, getCityNameByCoordinates } from '../../actions/locationActions';
 import mainStyling from '../../main_styling/main_styling';
 import Location from './Location';
+import Forecast from '../Forecast';
 
 import sunSrc from '../../img/sun.png';
 import weatherSrc from '../../img/weather.png';
@@ -87,21 +88,22 @@ componentDidUpdate (prevProps, prevState) {
         <ScrollView style={mainStyling.container} contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}>
         <Location />
         <View style={mainStyling.weatherContainer}>
-          <Text style={mainStyling.temperature}>{Math.round(this.props.weatherData.weatherData.main.temp)}°C</Text>
+          <Text style={mainStyling.temperature}>{Math.round(this.props.weatherData.weatherData.current.temp)}°C</Text>
           <View style={mainStyling.conditionsContainer}>
           <Image style={mainStyling.conditionsIcon} source={windSrc} />
-          <Text style={mainStyling.conditionsText}>{this.props.weatherData.weatherData.wind.speed} m/s</Text>
+          <Text style={mainStyling.conditionsText}>{this.props.weatherData.weatherData.current.wind_speed} m/s</Text>
           </View>
           <View style={mainStyling.conditionsContainer}>
           <Image style={mainStyling.conditionsIcon} source={humiditySrc} />
-    <Text style={mainStyling.conditionsText}>{this.props.weatherData.weatherData.main.humidity}%</Text>
+    <Text style={mainStyling.conditionsText}>{this.props.weatherData.weatherData.current.humidity}%</Text>
           </View>
           <View style={mainStyling.conditionsContainer}>
           <Image style={mainStyling.conditionsIcon} source={gaugeSrc} />
-          <Text style={mainStyling.conditionsText}>{this.props.weatherData.weatherData.main.pressure} hPa</Text>
+          <Text style={mainStyling.conditionsText}>{this.props.weatherData.weatherData.current.pressure} hPa</Text>
           </View>
-          {this.chooseIcon(this.props.weatherData.weatherData.weather[0].icon)}
+          {this.chooseIcon(this.props.weatherData.weatherData.current.weather[0].icon)}
         </View>
+        <Forecast />
         <View style={mainStyling.iconsAuthorContainer}>
             <Text>Icons made by </Text>
             <TouchableOpacity onPress={() => Linking.openURL("https://www.flaticon.com/authors/those-icons")}><Text>Those Icons</Text></TouchableOpacity>

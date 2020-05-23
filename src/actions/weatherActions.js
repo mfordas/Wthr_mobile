@@ -4,7 +4,8 @@ import { GET_WEATHER } from '../actions/types';
 
 setURL = (lat, lon) => {
     const weatherApiKey = '47f83ac09c8aba4209901acd619fdb03';
-    const weatherApiURL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&APPID=${weatherApiKey}`;
+    const weatherApiURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=metric&
+    exclude=current,daily&appid=${weatherApiKey}`;
     return weatherApiURL;
   };
 

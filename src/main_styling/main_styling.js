@@ -81,6 +81,15 @@ conditionsContainer: {
     height: 50,
     flexDirection: 'row',
     alignItems: 'center',
+    marginHorizontal: 5,
+},
+
+conditionsContainerVertical: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    marginVertical: 5,
+    marginHorizontal: 5,
 },
 
 mainWeatherIcon: {
@@ -108,6 +117,12 @@ iconsAuthorContainer: {
     color: 'black',
     alignSelf: 'center',
     flexDirection: 'row',
+},
+
+forecastContainer: {
+    height: 300,
+    justifyContent: 'center',
+    alignContent: 'center'
 }
 
 });

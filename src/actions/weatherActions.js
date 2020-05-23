@@ -9,9 +9,13 @@ setURL = (lat, lon) => {
   };
 
 export const  getWeatherData = (lat, lon) => async dispatch => {
+    try{
     const weatherData = await axios.get(setURL(lat, lon));
     dispatch({
         type: GET_WEATHER,
         weatherData: weatherData.data,
     });
+    } catch {
+        console.log('No data for this coordinates, try again');
+    }
 };

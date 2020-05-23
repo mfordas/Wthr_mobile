@@ -4,7 +4,6 @@ const initialState = {
     coordinatesData: {
         latt: '52.22977',
         longt: '21.01178',
-        
     },
     cityData: {
         standard: {

@@ -1,11 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 const background = '#03875b';
-const heartRightSideColor =  'rgb(233, 82, 18)';
-const heartLeftSideColor = 'rgb(197, 60, 28)';
-const humanColor = 'rgb(245, 239, 191)';
-const leafRightSideColor = 'rgb(142, 193, 79)';
-const leafLeftSideColor = 'rgb(119, 170, 49)';
 
 const mainStyling = StyleSheet.create({
   

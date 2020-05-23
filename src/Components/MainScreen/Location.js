@@ -57,7 +57,7 @@ async componentDidMount () {
 
   render() {
     return (
-              <View><TouchableOpacity style={mainStyling.locationContainer} onPress={() => this.setState({showForm: true})}>
+              <View><TouchableOpacity style={mainStyling.locationContainer} onPress={() => this.setState({showForm: !this.state.showForm})}>
           <Image style={mainStyling.iconLocation} source={locationSrc} />
           <Text style={mainStyling.mainText}>{this.showCityName()}, </Text>
           <Text style={mainStyling.mainText}>{this.showCityCountry()}</Text>

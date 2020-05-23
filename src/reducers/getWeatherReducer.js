@@ -2,13 +2,14 @@ import { GET_WEATHER } from '../actions/types';
 
 const initialState = {
     weatherData: {
-        main: {
+        current: {
             temp: 0,
             humidity: 0,
             pressure: 0,
+            wind_speed: 0,
+            weather: [{ }],
         },
-        wind: { speed: 0},
-        weather: [{ }],
+        daily: []
     },
     
 };

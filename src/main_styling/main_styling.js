@@ -120,9 +120,11 @@ iconsAuthorContainer: {
 },
 
 forecastContainer: {
-    height: 300,
-    justifyContent: 'center',
-    alignContent: 'center'
+    flexGrow: 1,
+    alignContent: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: background,
+    padding: 20,
 }
 
 });

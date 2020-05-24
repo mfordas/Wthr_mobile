@@ -1,13 +1,6 @@
 import React from 'react';
 import {
   SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  Button,
-  PermissionsAndroid,
 } from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Provider} from 'react-redux';

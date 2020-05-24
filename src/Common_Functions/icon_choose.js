@@ -13,41 +13,41 @@ import atmosphericSrc from '../img/atmospheric.png';
 import moonSrc from '../img/moon.png';
 import nightSrc from '../img/night.png';
 
-export function chooseIcon (iconCode) {
-    switch (iconCode) {
-      case '01d':
-        return sunSrc;
-      case '01n':
-        return nightSrc;
-      case '02d':
-        return weatherSrc;
-      case '02n':
-        return moonSrc;
-      case '03d':
-      case '03n':
-        return cloudSrc;
-      case '04d':
-      case '04n':
-        return cloudySrc;
-      case '09d':
-      case '09n':
-        return rainSrc;
-      case '10d':
-        return weather2Src;
-      case '10n':
-        return atmospheric2Src;
-      case '11d':
-        return stormSrc;
-      case '11n':
-        return atmosphericSrc;
-      case '13d':
-      case '13n':
-        return snowflakeSrc;
-      case '50d':
-        return fogSrc;
-      case '50n':
-        return foggySrc;
-      default:
-        return sunSrc;
-    }
-  };
+export function chooseIcon(iconCode) {
+  switch (iconCode) {
+    case '01d':
+      return sunSrc;
+    case '01n':
+      return nightSrc;
+    case '02d':
+      return weatherSrc;
+    case '02n':
+      return moonSrc;
+    case '03d':
+    case '03n':
+      return cloudSrc;
+    case '04d':
+    case '04n':
+      return cloudySrc;
+    case '09d':
+    case '09n':
+      return rainSrc;
+    case '10d':
+      return weather2Src;
+    case '10n':
+      return atmospheric2Src;
+    case '11d':
+      return stormSrc;
+    case '11n':
+      return atmosphericSrc;
+    case '13d':
+    case '13n':
+      return snowflakeSrc;
+    case '50d':
+      return fogSrc;
+    case '50n':
+      return foggySrc;
+    default:
+      return sunSrc;
+  }
+}

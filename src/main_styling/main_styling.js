@@ -1,15 +1,14 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 const background = '#03875b';
 
 const mainStyling = StyleSheet.create({
-  
-container: {
+  container: {
     flex: 1,
     backgroundColor: background,
-},
+  },
 
-locationContainer: {
+  locationContainer: {
     margin: 5,
     fontSize: 15,
     color: 'black',
@@ -17,32 +16,32 @@ locationContainer: {
     justifyContent: 'center',
     flexDirection: 'row',
     height: 50,
-    alignContent: "center",
-},
+    alignContent: 'center',
+  },
 
-iconLocation: {
+  iconLocation: {
     height: 20,
     width: 20,
     alignSelf: 'center',
     marginHorizontal: 10,
-},
+  },
 
-mainText: {
+  mainText: {
     fontSize: 20,
-    fontFamily: "Exo2-VariableFont_wght",
+    fontFamily: 'Exo2-VariableFont_wght',
     alignSelf: 'center',
-},
+  },
 
-inputContainer: {
+  inputContainer: {
     flexDirection: 'row',
     alignSelf: 'center',
     borderBottomColor: 'black',
     borderBottomWidth: 2,
     borderStyle: 'solid',
-    height: 40   
-},
+    height: 40,
+  },
 
-input: {
+  input: {
     fontSize: 20,
     paddingBottom: 0,
     textAlign: 'center',
@@ -50,18 +49,18 @@ input: {
     width: 200,
     alignSelf: 'center',
     justifyContent: 'center',
-    fontFamily: "Exo2-VariableFont_wght",
-},
+    fontFamily: 'Exo2-VariableFont_wght',
+  },
 
-iconConfirm: {
+  iconConfirm: {
     height: 20,
     width: 20,
     alignSelf: 'center',
-    marginBottom: -10
-},
+    marginBottom: -10,
+  },
 
-weatherContainer: {
-    margin: .5,
+  weatherContainer: {
+    margin: 0.5,
     fontSize: 45,
     padding: 1,
     textAlign: 'center',
@@ -70,63 +69,61 @@ weatherContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-},
+  },
 
-temperature: {
-    fontSize: 70
-},
+  temperature: {
+    fontSize: 70,
+  },
 
-
-conditionsContainer: {
+  conditionsContainer: {
     height: 50,
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: 5,
-},
+  },
 
-conditionsContainerVertical: {
+  conditionsContainerVertical: {
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
     marginVertical: 5,
     marginHorizontal: 5,
-},
+  },
 
-mainWeatherIcon: {
+  mainWeatherIcon: {
     margin: 15,
     width: 125,
     height: 125,
-},
+  },
 
-conditionsIcon: {
+  conditionsIcon: {
     height: 40,
     width: 40,
     marginHorizontal: 15,
-},
+  },
 
-conditionsText: {
+  conditionsText: {
     fontSize: 20,
-    fontFamily: "Exo2-VariableFont_wght",
-},
+    fontFamily: 'Exo2-VariableFont_wght',
+  },
 
-iconsAuthorContainer: {
-    margin: .5,
+  iconsAuthorContainer: {
+    margin: 0.5,
     fontSize: 10,
     padding: 1,
     textAlign: 'center',
     color: 'black',
     alignSelf: 'center',
     flexDirection: 'row',
-},
+  },
 
-forecastContainer: {
+  forecastContainer: {
     flexGrow: 1,
     alignContent: 'center',
     justifyContent: 'space-between',
     backgroundColor: background,
     padding: 20,
-}
-
+  },
 });
 
 export default mainStyling;

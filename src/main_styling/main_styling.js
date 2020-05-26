@@ -124,6 +124,17 @@ const mainStyling = StyleSheet.create({
     backgroundColor: background,
     padding: 20,
   },
+
+  headerText: {
+    fontSize: 25,
+    fontFamily: 'Exo2-VariableFont_wght',
+    alignContent: 'center',
+    flexDirection: 'row',
+    textAlign: 'center',
+    backgroundColor: background,
+    borderBottomWidth: 1,
+  },
+
 });
 
 export default mainStyling;

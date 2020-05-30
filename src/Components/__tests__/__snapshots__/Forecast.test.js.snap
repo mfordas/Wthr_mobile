@@ -1,21 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders correctly 1`] = `
-<RCTScrollView
-  contentContainerStyle={
-    Object {
-      "flexGrow": 1,
-      "justifyContent": "space-between",
+Array [
+  <Text
+    style={
+      Object {
+        "alignContent": "center",
+        "backgroundColor": "#03875b",
+        "borderBottomWidth": 1,
+        "flexDirection": "row",
+        "fontFamily": "Exo2-VariableFont_wght",
+        "fontSize": 25,
+        "textAlign": "center",
+      }
     }
-  }
-  horizontal={true}
-  style={
-    Object {
-      "flex": 1,
-      "flexDirection": "row",
+  >
+    7 days forecast
+  </Text>,
+  <RCTScrollView
+    contentContainerStyle={
+      Object {
+        "flexGrow": 1,
+        "justifyContent": "space-between",
+      }
     }
-  }
->
-  <View />
-</RCTScrollView>
+    horizontal={true}
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
+  >
+    <View />
+  </RCTScrollView>,
+]
 `;

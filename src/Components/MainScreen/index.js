@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 import {getWeatherData} from '../../actions/weatherActions';
 import {
@@ -119,6 +120,12 @@ const mapStateToProps = (state) => ({
   coordinatesData: state.coordinatesData,
   cityData: state.cityData,
 });
+
+MainScreen.propTypes = {
+  weatherData: PropTypes.object,
+  coordinatesData: PropTypes.object,
+  cityData: PropTypes.object
+};
 
 export default connect(mapStateToProps, {
   getWeatherData,

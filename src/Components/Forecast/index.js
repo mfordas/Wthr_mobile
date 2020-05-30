@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, Image, ScrollView} from 'react-native';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 import {chooseIcon} from '../../Common_Functions/icon_choose';
 import {changeMetersPerSecondToKMetersPerHour} from '../../Common_Functions/change_m_to_km';
@@ -90,5 +91,9 @@ class Forecast extends React.Component {
 const mapStateToProps = (state) => ({
   weatherData: state.weatherData,
 });
+
+Forecast.propTypes = {
+  weatherData: PropTypes.object
+}
 
 export default connect(mapStateToProps, {})(Forecast);

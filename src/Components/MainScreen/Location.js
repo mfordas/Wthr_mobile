@@ -8,6 +8,7 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 import {
   getCityCoordinatesByName,
@@ -112,6 +113,11 @@ const mapStateToProps = (state) => ({
   coordinatesData: state.coordinatesData,
   cityData: state.cityData,
 });
+
+Location.propTypes = {
+  coordinatesData: PropTypes.object,
+  cityData: PropTypes.object
+}
 
 export default connect(mapStateToProps, {
   getCityCoordinatesByName,

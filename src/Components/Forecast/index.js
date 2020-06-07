@@ -10,7 +10,6 @@ import mainStyling from '../../main_styling/main_styling';
 import gaugeSrc from '../../img/gauge.png';
 import humiditySrc from '../../img/humidity.png';
 import windSrc from '../../img/wind.png';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 class Forecast extends React.Component {
   constructor(props) {
@@ -44,7 +43,7 @@ class Forecast extends React.Component {
         horizontal={true}>
         {this.props.weatherData.weatherData.daily.map((day) => {
           return (
-            <View style={mainStyling.forecastContainer}>
+            <View key={day.dt} style={mainStyling.forecastContainer}>
               <View style={mainStyling.conditionsContainerVertical}>
                 <Text style={[mainStyling.conditionsText, {marginBottom: 10}]}>Date</Text>
                 {this.dateFormat(day.sunrise)}

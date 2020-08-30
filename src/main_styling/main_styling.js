@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 
-const background = '#03875b';
+// const background = '#03875b';
+const background = '#119c80';
 
 const mainStyling = StyleSheet.create({
   container: {

@@ -129,11 +129,12 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.wthr_mobile"
+        applicationId "pl.fordas.wthr_mobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     splits {
         abi {

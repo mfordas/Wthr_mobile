@@ -110,6 +110,15 @@ class MainScreen extends React.Component {
             <Text>www.flaticon.com</Text>
           </TouchableOpacity>
         </View>
+        <View style={mainStyling.iconsAuthorContainer}>
+          <Text>Weather API by </Text>
+          <TouchableOpacity
+            onPress={() =>
+              Linking.openURL('https://openweathermap.org/')
+            }>
+            <Text>OpenWeatherMap</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     );
   }

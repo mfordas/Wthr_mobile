@@ -1,4 +1,4 @@
-package com.wthr_mobile;
+package pl.fordas.wthr_mobile;
 
 import com.facebook.react.ReactActivity;
 

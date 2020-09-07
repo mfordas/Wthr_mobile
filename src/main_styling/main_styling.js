@@ -70,6 +70,7 @@ const mainStyling = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
+    flexGrow: 1,
   },
 
   temperature: {
@@ -111,7 +112,7 @@ const mainStyling = StyleSheet.create({
   iconsAuthorContainer: {
     margin: 0.5,
     fontSize: 10,
-    padding: 1,
+    padding: 3,
     textAlign: 'center',
     color: 'black',
     alignSelf: 'center',

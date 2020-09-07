@@ -65,6 +65,17 @@ class Location extends React.Component {
       : 'try again';
   };
 
+  searchWeatherInTypedCity = async () => {
+    this.setState({showForm: false});
+    await this.props.getCityCoordinatesByName(
+      this.state.citySearch,
+    );
+    await this.props.getCityNameByCoordinates(
+      this.props.coordinatesData.coordinatesData.latt,
+      this.props.coordinatesData.coordinatesData.longt,
+    );
+  };
+
   async componentDidMount() {
     this.requestLocationPermission();
   }
@@ -85,19 +96,12 @@ class Location extends React.Component {
               style={mainStyling.input}
               onChangeText={(text) =>
                 this.setState({citySearch: text})
-              }></TextInput>
+              }
+              onSubmitEditing={async () => this.searchWeatherInTypedCity()}>
+              </TextInput>
             <TouchableOpacity
               style={mainStyling.locationContainer}
-              onPress={async () => {
-                this.setState({showForm: false});
-                await this.props.getCityCoordinatesByName(
-                  this.state.citySearch,
-                );
-                await this.props.getCityNameByCoordinates(
-                  this.props.coordinatesData.coordinatesData.latt,
-                  this.props.coordinatesData.coordinatesData.longt,
-                );
-              }}>
+              onPress={async () => this.searchWeatherInTypedCity()}>
               <Image style={mainStyling.iconConfirm} source={confirmSrc} />
             </TouchableOpacity>
           </View>
